@@ -1,0 +1,14 @@
+{
+    "dart.flutterSdkPath": null,
+    "dart.projectSearchDepth": 5,
+    "dart.enableSdkFormatter": true,
+    "dart.lineLength": 80,
+    "dart.runPubGetOnPubspecChanges": "always",
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    "dart.hotReloadOnSave": "all",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    }
+}

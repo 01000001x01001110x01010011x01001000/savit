@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:savit/helper_classes/app_colors.dart';
-import 'package:savit/helper_classes/app_constants.dart';
-import 'package:savit/helper_classes/app_images.dart';
-import 'package:savit/views/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:savit/features/auth/view/login_screen.dart';
+import 'package:savit/features/onboarding/bloc/onboarding_bloc.dart';
+import 'package:savit/features/onboarding/view/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -17,24 +15,28 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ),
-      );
-    });
+    context.read<OnboardingBloc>().add(const OnboardingChecked());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      color: AppColors.baseGreenColor,
-      child: Image.asset(
-        AppImages.splashImage,
-        width: AppConstants.mobileWidth * 0.8,
+    return BlocListener<OnboardingBloc, OnboardingState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == OnboardingStatus.firstLaunch) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<void>(builder: (_) => const OnboardingScreen()),
+          );
+        }
+
+        if (state.status == OnboardingStatus.completed) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
+          );
+        }
+      },
+      child: const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
       ),
     );
   }
